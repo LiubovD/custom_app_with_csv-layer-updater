@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {filterSQL} from './filters.mjs';
+import {CSV_FIELDS,planAdditions} from './core.mjs';
+assert.equal(filterSQL('','category','','moshup_site',false),'');
+assert.equal(filterSQL('','category','burial','moshup_site',true),"category = 'burial' AND moshup_site = 'yes'");
+assert.equal(filterSQL('access = 1','category',"a'b",null,false),"(access = 1) AND category = 'a''b'");
+assert.throws(()=>filterSQL('','category','',null,true));
+const headers=[...CSV_FIELDS,'moshup_site'];
+const fields=headers.map(name=>({name,type:['latitude','longitude'].includes(name)?'double':'string',editable:true}));
+const row=headers.map(n=>({id:'1',latitude:'41',longitude:'-71',moshup_site:'yes'}[n]||'text'));
+assert.equal(planAdditions({headers,rows:[row]},fields,[],false).additions[0].attributes.moshup_site,'yes');
+assert.equal(planAdditions({headers,rows:[row]},fields,['1'],false).additions.length,0);
+const legacy=planAdditions({headers:CSV_FIELDS,rows:[row.slice(0,-1)]},fields,[],false);
+assert.equal(legacy.additions.length,1);
+assert.ok(!('moshup_site' in legacy.additions[0].attributes));
+console.log('Standalone filter/import tests passed');
