@@ -1,0 +1,24 @@
+{
+  "name": "csv-layer-updater",
+  "label": "CSV Layer Updater",
+  "type": "widget",
+  "version": "1.5.0",
+  "exbVersion": "1.21.0",
+  "author": "Custom GIS Tools",
+  "description": "Add missing points from CSV by id; preserve all existing features and map 17 site fields automatically.",
+  "copyright": "",
+  "license": "MIT",
+  "properties": {
+    "hasSettingPage": true
+  },
+  "dependency": [
+    "jimu-arcgis"
+  ],
+  "translatedLocales": [
+    "en"
+  ],
+  "defaultSize": {
+    "width": 360,
+    "height": 440
+  }
+}
