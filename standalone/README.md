@@ -1,3 +1,17 @@
+## Version 1.3 — fixed destination, compact importer
+
+The destination is now fixed in app.mjs to wampanoag_places_agol_coordinates/FeatureServer/0 at services3.arcgis.com/zrjd7IdrONctjbYR. There is no visible URL or Connect button. After AGOL authentication, startup connects automatically and checks the required editable Text field moshup_site. No field is skipped or created automatically. Existing IDs remain unchanged.
+
+The map uses this same layer for Category and Moshup features filters. If absent from the existing web map, the app adds it at runtime with its service defaults and hides the former configured import layer if present. This changes only the displayed app, not the saved web map. To customize new-layer symbols/popups permanently, configure it in your AGOL web map. Other map layers remain as configured.
+
+Replace the entire standalone folder and push to GitHub. Versioned module URLs avoid mixing previous scripts. Configuration for OAuth and web map still comes from ../cdn/7/config.json. No live private-layer or OAuth test was possible here.
+
+Earlier version notes below describe superseded behavior where they conflict with this section.
+
+## Version 1.2: editable destination and cache refresh
+
+Destination controls are enabled independently of map startup; Connect authenticates before loading the selected layer. HTML references versioned app, CSS and core module URLs to avoid mixing old cached code with the updated form. The importer heading displays v1.2. If an existing service worker still serves old HTML, use an InPrivate window or clear this site's stored data. The map and import destination remain separate.
+
 ## Update: selectable destination and required Moshup column
 
 The importer now starts with an editable destination URL (prefilled from the existing configuration) and a Connect target layer button. Select a layer each session. Changing the URL clears the connection, mapping, report and preview so a stale preview cannot write to another destination. The selected CSV remains available. Both destination controls and import controls are locked during requests; collapse/reopen remains available.
