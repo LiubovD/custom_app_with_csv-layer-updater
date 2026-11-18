@@ -1,3 +1,11 @@
+## Update: selectable destination and required Moshup column
+
+The importer now starts with an editable destination URL (prefilled from the existing configuration) and a Connect target layer button. Select a layer each session. Changing the URL clears the connection, mapping, report and preview so a stale preview cannot write to another destination. The selected CSV remains available. Both destination controls and import controls are locked during requests; collapse/reopen remains available.
+
+moshup_site is required in the CSV and as an editable Text field in the selected destination. Nothing is silently skipped and no schema changes are performed by the app. Add a nullable Text field named moshup_site in AGOL if missing, then reconnect. Existing ID rows remain skipped, so this does not backfill existing records. Map filters still operate on the original web-map layer, independently of the import destination; importing to another layer does not add that layer to the map.
+
+Replace the standalone folder in the GitHub checkout and commit/push. Existing config and OAuth Client ID remain unchanged. Live private service and browser testing remain outstanding.
+
 # Standalone sacred sites app
 
 A buildless ArcGIS Maps SDK for JavaScript 4.34 app. Serve this repository over HTTPS and open `standalone/`. The existing Experience Builder app at the repository root remains intact. No npm or Node installation is needed to host this app.
@@ -10,7 +18,7 @@ This app reads the existing `../cdn/7/config.json` for the portal URL, public OA
 
 Category and Moshup features are independent and combine with AND. All features removes only the Moshup restriction; existing web-map definition expressions are retained. Moshup only matches the actual `moshup_site` field against the literal text `yes`. If missing, that control is disabled with a message. No layer visibility control is included. Basemaps, Legend, Print and Import CSV open one panel at a time. Collapse/reopen retains importer state while the page stays open.
 
-CSV headers: id,name,category,access,town,state,region,geocode_address,latitude,longitude,coord_basis,location_note,description,source_url,coord_status,coord_source_url,coord_review_note. Optional column: moshup_site. When included, map it to an existing editable field; coded-value domains still apply. The app does not alter the layer schema or bypass domains. Longitude/latitude must be WGS84 decimal degrees. Points are projected to the target SR using projectOperator. Default equation-based datum transformation only; no survey-grade/grid transformation claim.
+CSV headers: id,name,category,access,town,state,region,geocode_address,latitude,longitude,coord_basis,location_note,description,source_url,coord_status,coord_source_url,coord_review_note. Required additional column: moshup_site. Map it to an existing editable Text field; coded-value domains still apply. The app does not alter the layer schema or bypass domains. Longitude/latitude must be WGS84 decimal degrees. Points are projected to the target SR using projectOperator. Default equation-based datum transformation only; no survey-grade/grid transformation claim.
 
 Importer supports 500 rows/5 MB and up to 50,000 visible target records. It queries a separate unfiltered FeatureLayer so the UI category/Moshup selection does not affect duplicate checks. It cannot see records hidden by server-side access controls or view definitions. Ensure editors can query every relevant ID; a unique ID constraint is recommended for concurrent users. Only addFeatures is used, never updates or deletes. Invalid rows are excluded; duplicate new IDs invalidate every occurrence. Preview expires after five minutes; a fresh snapshot check precedes save. A requested rollback does not guarantee atomicity on every service: inspect report/service after incomplete or uncertain outcomes before retrying.
 
