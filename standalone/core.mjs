@@ -56,6 +56,7 @@ export function uniqueKey (raw        , f           )         {
   return String(value)
 }
 
+export const REQUIRED_CSV_FIELDS = ['id','name','latitude','longitude']
 export const CSV_FIELDS = ['id', 'name', 'category', 'access', 'town', 'state', 'region', 'geocode_address', 'latitude', 'longitude', 'coord_basis', 'location_note', 'description', 'source_url', 'coord_status', 'coord_source_url', 'coord_review_note']
                                                                                                          
                                                                                       
@@ -81,7 +82,7 @@ export function schemaMapping (fields               , headers           , overri
   const mapping                              = {}
   const choices = { ...suggestMapping(fields), ...overrides }
   const used = new Set        ()
-  for (const name of [...CSV_FIELDS, ...(headers?.includes("moshup_site") ? ["moshup_site"] : [])]) {
+  for (const name of [...CSV_FIELDS, ...(headers?.includes("moshup_site") ? ["moshup_site"] : [])].filter(n => !headers || headers.includes(n) || REQUIRED_CSV_FIELDS.includes(n))) {
     const matches = fields.filter(f => f.name === choices[name])
     if (matches.length !== 1) throw new Error(`Select a destination field for ${name} under Field mapping.`)
     const field = matches[0]
